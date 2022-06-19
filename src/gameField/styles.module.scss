@@ -1,0 +1,58 @@
+$gameColor: green;
+$cellWidth: 20px;
+$edgeWidth: 2px;
+
+.gameField {
+  margin: 0 auto;
+  position: relative;
+  cursor: pointer;
+}
+
+.gameField__columns {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 100%;
+  z-index: -2;
+}
+
+.gameField__rows {
+  width: 100%;
+  position: relative;
+  z-index: -2;
+}
+
+.gameField__column,
+.gameField__row {
+  border-style: solid;
+  border-color: $gameColor;
+  box-sizing: border-box;
+}
+
+.gameField__column {
+  border-width: 0 $edgeWidth 0 0;
+  width: $cellWidth;
+  height: 100%;
+
+  &:first-child {
+    border-width: 0 $edgeWidth 0 $edgeWidth
+  }
+}
+
+.gameField__row {
+  border-width: 0 0 $edgeWidth 0;
+  height: $cellWidth;
+
+  &:first-child {
+    border-width: $edgeWidth 0 $edgeWidth 0;
+  }
+}
+
+.gameField__cell {
+  position: absolute;
+  z-index: -1;
+  background-color: $gameColor;
+  width: $cellWidth;
+  height: $cellWidth;
+}
