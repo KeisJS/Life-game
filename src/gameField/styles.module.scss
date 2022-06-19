@@ -8,19 +8,33 @@ $edgeWidth: 2px;
   cursor: pointer;
 }
 
+.gameField__cells,
+.gameField__gameGrid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gameField__gameGrid {
+  z-index: -2;
+}
+
+.gameField__cells {
+  z-index: -1;
+}
+
 .gameField__columns {
   position: absolute;
   top: 0;
   left: 0;
   display: flex;
   height: 100%;
-  z-index: -2;
 }
 
 .gameField__rows {
   width: 100%;
-  position: relative;
-  z-index: -2;
 }
 
 .gameField__column,
