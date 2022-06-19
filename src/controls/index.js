@@ -1,21 +1,14 @@
 import styles from './styles.module.scss'
 import GameFieldSizeControl from './gameFieldSizeControl'
+import GameFieldClearControl from './gameFieldClearControl'
 
 // const layout = `
 //     <div class="${styles.controls}">
-//       <label class="${styles.controlField}">
-//         Size:
-//         <input type="number" />
-//         <button>Build field</button>
-//       </label>
 //       <label class="${styles.controlField}">
 //         <button>One step</button>
 //       </label>
 //       <label class="${styles.controlField}">
 //         <button>Run</button>
-//       </label>
-//       <label class="${styles.controlField}">
-//         <button>Clear</button>
 //       </label>
 //     </div>
 //   `
@@ -26,8 +19,9 @@ const Controls = () => {
   controlsRoot.className = styles.controls
 
   const gameFieldSizeControl = GameFieldSizeControl()
+  const gameFieldClearControl = GameFieldClearControl()
 
-  controlsRoot.appendChild(gameFieldSizeControl)
+  controlsRoot.append(gameFieldSizeControl, gameFieldClearControl)
 
   return controlsRoot
 }

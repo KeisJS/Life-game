@@ -1,5 +1,5 @@
 import styles from './styles.module.scss'
-import { setGameFieldSizeCommand } from '../commands/commandsCreators'
+import { setGameFieldSizeCommand, clearGameField } from '../commands/commandsCreators'
 import { Commands } from '../commands/commands'
 import GameGrid from './gameGrid'
 import LifeCells from './lifeCells'
@@ -33,6 +33,10 @@ const GameField = () => {
     gameField.style.height = `${size * 20}px`
 
     gameGrid.buildOrRefreshGrid(size)
+    lifeCells.clear()
+  })
+
+  addCommandHandler(clearGameField, () => {
     lifeCells.clear()
   })
 

@@ -17,8 +17,10 @@ class LifeCells {
   }
 
   clear() {
-    this.cells.clear()
-    this.container.innerHTML = ''
+    if (this.cells.size > 0) {
+      this.cells.clear()
+      this.container.innerHTML = ''
+    }
   }
 
   addCell({ x, y }) {

@@ -11,7 +11,7 @@ describe('Test gameFieldSizeControl', () => {
 
     commands.addCommandHandler(setGameFieldSizeCommand, setGameFieldSizeHandler)
 
-    const gameFieldSizeControl = GameFieldSizeControl(commands)
+    const gameFieldSizeControl = GameFieldSizeControl()
 
     document.body.append(gameFieldSizeControl)
 
