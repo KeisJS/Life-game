@@ -21,7 +21,7 @@ const GameField = () => {
     const elX = x - x%20
     const elY = y - y%20
 
-    console.log({ x, y, elX, elY })
+    console.log({ x: elX / 20, y: elY / 20 })
 
     lifeCells.refreshCell({ x: elX, y: elY })
   })

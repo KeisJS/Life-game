@@ -39,26 +39,62 @@ class GameModel {
     })
   }
 
+  getRange(c) {
+    let range
+
+    if (c === 0) {
+      range = [this.maxCoords, 0, 1]
+    } else if (c === this.maxCoords) {
+      range = [c - 1, c, 0]
+    } else {
+      range = [c - 1, c, c + 1]
+    }
+
+    return range
+  }
+
   nextGeneration() {
-    const lifeCellColumns = this.gameFieldColumns.filter(Boolean)
-    const newBornCells = []
     const deadCells = []
+    const emptyCellSiblings = []
 
-    lifeCellColumns.filter(Boolean).forEach(column => {
-      column.filter(Boolean).forEach(([x, y]) => {
-        const siblingsColumn = this.gameFieldColumns
-          .slice(x-1, x+2)
-          .filter(Boolean)
-        const siblings = siblingsColumn.reduce((cells, siblingColumn) => {
-          return ([...cells, ...siblingColumn.slice(y-1, y+2).filter(Boolean)])
-        }, [])
-          .filter(cell => !(cell[0] === x && cell[1] === y))
+    this.gameFieldColumns.forEach(column => {
+      column.forEach(([x, y]) => {
+        const rangeX = this.getRange(x)
+        const rangeY = this.getRange(y)
 
-        if (siblings.length !== 2 && siblings.length !== 3) {
+        let currentLifeSiblings = 0
+        rangeX.forEach(sX => {
+          rangeY.forEach(sY => {
+            if (!(sX === x && sY === y)) {
+              if (this.gameFieldColumns[sX] && this.gameFieldColumns[sX][sY]) {
+                currentLifeSiblings++
+              } else {
+                if (!emptyCellSiblings[sX]) {
+                  emptyCellSiblings[sX] = []
+                }
+
+                emptyCellSiblings[sX][sY] = emptyCellSiblings[sX][sY] ? ++emptyCellSiblings[sX][sY] : 1
+              }
+            }
+          })
+        })
+
+        if (currentLifeSiblings !== 2 && currentLifeSiblings !== 3) {
           deadCells.push([x, y])
         }
       })
     })
+
+    const newBornCells = emptyCellSiblings.reduce((cells, column, x) => {
+      column.forEach((count, y) => {
+        if (count === 3) {
+          cells.push([x, y])
+        }
+      })
+
+      return cells
+    }, [])
+
 
     if (deadCells.length > 0) {
       this.removeDeadCell(deadCells)
