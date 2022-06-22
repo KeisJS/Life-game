@@ -3,6 +3,7 @@ class GameModel {
   static getInstance(...params) {
     if (!GameModel.instance) {
       GameModel.instance = new GameModel(...params)
+      window.cells = []
     }
 
     return GameModel.instance
@@ -46,6 +47,8 @@ class GameModel {
     } else {
       this.fillCells([[x, y]])
     }
+
+    window.cells.push([x, y])
   }
 
   getLifeCells() {

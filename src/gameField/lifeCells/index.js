@@ -24,7 +24,11 @@ class LifeCells {
     }
   }
 
-  addCell({ x, y }) {
+  addCell([x, y]) {
+    this.container.appendChild(this.createCellView([x, y]))
+  }
+
+  createCellView([x, y]) {
     const cell = document.createElement('div')
 
     cell.className = styles.gameField__cell
@@ -32,10 +36,11 @@ class LifeCells {
     cell.style.top = `${y}px`
 
     this.cells.set(`${x}:${y}`, cell)
-    this.container.appendChild(cell)
+
+    return cell
   }
 
-  removeCell({ x, y }) {
+  removeCell([x, y]) {
     const key = `${x}:${y}`
     const cellView = this.cells.get(key)
 
@@ -52,11 +57,29 @@ class LifeCells {
     const cell = this.cells.get(key)
 
     if (cell) {
-      this.removeCell({ x: cX, y: cY })
+      this.removeCell([cX, cY])
     } else {
-
-      this.addCell({ x: cX, y: cY })
+      this.addCell([cX, cY])
     }
+  }
+
+  refreshCells(cells) {
+    const viewCells = document.createDocumentFragment()
+
+    cells.forEach(([x, y]) => {
+      const cX = x * GameGrid.gridCellSize
+      const cY = y * GameGrid.gridCellSize
+      const key = `${cX}:${cY}`
+      const cell = this.cells.get(key)
+
+      if (cell) {
+        this.removeCell([cX, cY])
+      } else {
+        viewCells.appendChild(this.createCellView([cX, cY]))
+      }
+    })
+
+    this.container.appendChild(viewCells)
   }
 
   getContainer() {

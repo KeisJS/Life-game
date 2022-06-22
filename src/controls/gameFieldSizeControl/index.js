@@ -2,14 +2,14 @@ import controlStyles from '../styles.module.scss'
 import { setGameFieldSizeCommand } from '../../commands/commandsCreators'
 import { Commands } from '../../commands/commands'
 
-const GameFieldSizeControl = () => {
+const GameFieldSizeControl = ({ defaultValue = ''} = {}) => {
   const { runCommand } = Commands.getInstance()
 
   const template = `
 <div class="${controlStyles.controlField}">
  <label>
     Size: 
-    <input type="number" min="0" value="90" />
+    <input type="number" min="0" value="${defaultValue}" />
   </label>
   <button>Build field</button>    
 </div>

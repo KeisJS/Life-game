@@ -1,5 +1,6 @@
 import GameField from './gameField'
 import Controls from './controls'
+
 const App = () => {
   const root = document.querySelector('#root')
 
