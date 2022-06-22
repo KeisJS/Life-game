@@ -1,8 +1,13 @@
 import styles from './styles.module.scss'
-import { setGameFieldSizeCommand, clearGameField } from '../commands/commandsCreators'
+import {
+  setGameFieldSizeCommand,
+  clearGameField,
+  gameOneStep
+} from '../commands/commandsCreators'
 import { Commands } from '../commands/commands'
 import GameGrid from './gameGrid'
 import LifeCells from './lifeCells'
+import GameModel from '../gameModel'
 
 const GameField = () => {
   const gameField = document.createElement('div')
@@ -17,13 +22,15 @@ const GameField = () => {
 
   gameField.appendChild(lifeCells.getContainer())
 
+  const game = GameModel.getInstance()
+
   gameField.addEventListener('click', ({ offsetX: x, offsetY: y, target }) => {
-    const elX = x - x%20
-    const elY = y - y%20
+    const cellSize = GameGrid.gridCellSize
+    const elX = x - x%cellSize
+    const elY = y - y%cellSize
 
-    console.log({ x: elX / 20, y: elY / 20 })
-
-    lifeCells.refreshCell({ x: elX, y: elY })
+    lifeCells.refreshCell([elX, elY])
+    game.refreshCell([elX / cellSize, elY / cellSize])
   })
 
   const { addCommandHandler } = Commands.getInstance()
@@ -34,10 +41,24 @@ const GameField = () => {
 
     gameGrid.buildOrRefreshGrid(size)
     lifeCells.clear()
+    game.setSize(size)
   })
 
   addCommandHandler(clearGameField, () => {
     lifeCells.clear()
+    game.clear()
+  })
+
+  addCommandHandler(gameOneStep, () => {
+    const { dead, newBorn } = game.nextGeneration()
+
+    const workCells = [...dead, ...newBorn]
+
+    workCells.forEach(cell => {
+      const [x , y] = cell
+
+      lifeCells.refreshCell([x * GameGrid.gridCellSize, y * GameGrid.gridCellSize])
+    })
   })
 
   return gameField

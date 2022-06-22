@@ -7,9 +7,7 @@ const App = () => {
 
   root.appendChild(controls)
 
-  const gameField = GameField({
-    appRoot: root
-  })
+  const gameField = GameField()
 
   root.appendChild(gameField)
 }

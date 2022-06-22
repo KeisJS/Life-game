@@ -1,32 +1,29 @@
 import controlStyles from '../styles.module.scss'
-import { setGameFieldSizeCommand } from '../../commands/commandsCreators'
+import { gameOneStep } from '../../commands/commandsCreators'
 import { Commands } from '../../commands/commands'
 
-const GameFieldSizeControl = () => {
+const OneStepControl = () => {
   const { runCommand } = Commands.getInstance()
 
   const template = `
 <div class="${controlStyles.controlField}">
- <label>
-    Size: 
-    <input type="number" min="0" value="90" />
-  </label>
-  <button>Build field</button>    
+  <button>One step</button>
 </div>
   `
+
   const root = document.createElement('template')
 
   root.innerHTML = template
 
   const el = root.content.cloneNode(true)
-  const input = el.querySelector('input')
+
   const button = el.querySelector('button')
 
   button.addEventListener('click', () => {
-    runCommand(setGameFieldSizeCommand(input.value))
+    runCommand(gameOneStep())
   })
 
   return el
 }
 
-export default GameFieldSizeControl
+export default OneStepControl

@@ -1,12 +1,10 @@
 import styles from './styles.module.scss'
 import GameFieldSizeControl from './gameFieldSizeControl'
 import GameFieldClearControl from './gameFieldClearControl'
+import OneStepControl from './oneStepControl'
 
 // const layout = `
 //     <div class="${styles.controls}">
-//       <label class="${styles.controlField}">
-//         <button>One step</button>
-//       </label>
 //       <label class="${styles.controlField}">
 //         <button>Run</button>
 //       </label>
@@ -20,8 +18,9 @@ const Controls = () => {
 
   const gameFieldSizeControl = GameFieldSizeControl()
   const gameFieldClearControl = GameFieldClearControl()
+  const oneStepControl = OneStepControl()
 
-  controlsRoot.append(gameFieldSizeControl, gameFieldClearControl)
+  controlsRoot.append(gameFieldSizeControl, gameFieldClearControl, oneStepControl)
 
   return controlsRoot
 }

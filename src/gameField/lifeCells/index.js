@@ -1,4 +1,5 @@
 import styles from '../styles.module.scss'
+import GameGrid from '../gameGrid'
 
 class LifeCells {
   container
@@ -36,23 +37,25 @@ class LifeCells {
 
   removeCell({ x, y }) {
     const key = `${x}:${y}`
-    const cell = this.cells.get(key)
+    const cellView = this.cells.get(key)
 
-    cell.remove()
+    cellView.remove()
     this.cells.delete(key)
 
     return this
   }
 
-  refreshCell({ x, y }) {
-    const key = `${x}:${y}`
+  refreshCell([x, y ], isRaw= false) {
+    const cX = isRaw ? x * GameGrid.gridCellSize : x
+    const cY = isRaw ? y * GameGrid.gridCellSize : y
+    const key = `${cX}:${cY}`
     const cell = this.cells.get(key)
 
     if (cell) {
-      cell.remove()
-      this.cells.delete(key)
+      this.removeCell({ x: cX, y: cY })
     } else {
-      this.addCell({ x, y })
+
+      this.addCell({ x: cX, y: cY })
     }
   }
 

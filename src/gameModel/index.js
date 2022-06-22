@@ -11,7 +11,10 @@ class GameModel {
   gameFieldColumns = []
   maxCoords
 
-  constructor({ size, initialCells }) {
+  constructor({ size, initialCells } = {
+    size: 1,
+    initialCells: []
+  }) {
     this.maxCoords = size - 1
     this.fillCells(initialCells)
   }
@@ -19,6 +22,10 @@ class GameModel {
 
   clear() {
     this.gameFieldColumns = []
+  }
+
+  setSize(size) {
+    this.maxCoords = size - 1
   }
   
   fillCells(cells) {
@@ -31,6 +38,22 @@ class GameModel {
       
       this.gameFieldColumns[x][y] = [x, y]
     })
+  }
+
+  refreshCell([x, y]) {
+    if (this.gameFieldColumns[x] && this.gameFieldColumns[x][y]) {
+      delete this.gameFieldColumns[x][y]
+    } else {
+      this.fillCells([[x, y]])
+    }
+  }
+
+  getLifeCells() {
+    return this.gameFieldColumns.reduce((cells, column) => {
+      column.forEach(cell => cells.push(cell))
+
+      return cells
+    }, [])
   }
 
   removeDeadCell(cells) {
@@ -98,6 +121,10 @@ class GameModel {
 
     if (deadCells.length > 0) {
       this.removeDeadCell(deadCells)
+    }
+
+    if (newBornCells.length > 0) {
+      this.fillCells(newBornCells)
     }
 
     return {

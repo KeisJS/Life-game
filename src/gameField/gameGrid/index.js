@@ -3,6 +3,8 @@ import styles from '../styles.module.scss'
 class GameGrid {
   container
 
+  static gridCellSize = 20
+
   constructor(container) {
     this.container = container
   }
