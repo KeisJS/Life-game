@@ -42,6 +42,7 @@ const GameField = () => {
     gameGrid.buildOrRefreshGrid(size)
     lifeCells.clear()
     game.setSize(size)
+    game.clear()
   })
 
   addCommandHandler(clearGameField, () => {

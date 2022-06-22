@@ -2,6 +2,13 @@
   padding: 20px 0;
   margin: 0 auto;
   display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: white;
+  width: 100%;
+  box-shadow: 1px 1px 10px green;
+  z-index: 2;
 }
 
 .controlField {
