@@ -7,6 +7,8 @@ class LifeGameView extends Observer {
   container
   cellsView
   gridView
+  lastX
+  lastY
 
   static gridCellSize = 10
 
@@ -51,38 +53,42 @@ class LifeGameView extends Observer {
     this.cellsView.clear()
   }
 
-  getMouseMoveHandler = () => {
-    let lastX
-    let lastY
+  onMouseDownHandler = ({ offsetX: x, offsetY: y }) => {
     const cellSize = LifeGameView.gridCellSize
+    const curX = x - x%cellSize
+    const curY = y - y%cellSize
+    this.lastX = curX
+    this.lastY = curY
 
-    return ({ offsetX: x, offsetY: y }) => {
-      const curX = x - x%cellSize
-      const curY = y - y%cellSize
-
-      if (!(curX === lastX && curY === lastY)) {
-        lastX = curX
-        lastY = curY
-
-        this.cellsView.refreshCell([curX, curY])
-        this.emitEvent('refresh_cell', [curX / cellSize, curY / cellSize])
-      }
-    }
+    this.cellsView.refreshCell([curX, curY])
+    this.emitEvent('refresh_cell', [curX / cellSize, curY / cellSize])
   }
 
-  addMouseMoveHandler() {
-    const mouseMoveHandler = this.getMouseMoveHandler()
+  onMouseMoveHandler = ({ offsetX: x, offsetY: y }) => {
+    const cellSize = LifeGameView.gridCellSize
+    const curX = x - x%cellSize
+    const curY = y - y%cellSize
 
-    this.container.addEventListener('mousedown', ({ offsetX: x, offsetY: y }) => {
-      this.container.addEventListener('mousemove', mouseMoveHandler)
+    if (!(curX === this.lastX && curY === this.lastY)) {
+      this.lastX = curX
+      this.lastY = curY
+
+      this.cellsView.refreshCell([curX, curY])
+      this.emitEvent('refresh_cell', [curX / cellSize, curY / cellSize])
+    }
+  }
+  addMouseMoveHandler() {
+    this.container.addEventListener('mousedown', e => {
+      this.onMouseDownHandler(e)
+      this.container.addEventListener('mousemove', this.onMouseMoveHandler)
     })
 
     this.container.addEventListener('mouseup', () => {
-      this.container.removeEventListener('mousemove', mouseMoveHandler)
+      this.container.removeEventListener('mousemove', this.onMouseMoveHandler)
     })
 
     this.container.addEventListener('mouseleave', () => {
-      this.container.removeEventListener('mousemove', mouseMoveHandler)
+      this.container.removeEventListener('mousemove', this.onMouseMoveHandler)
     })
   }
 
