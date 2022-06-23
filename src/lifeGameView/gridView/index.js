@@ -1,27 +1,25 @@
 import styles from '../styles.module.scss'
 
-class GameGrid {
+class GridView {
   container
 
-  static gridCellSize = 10
-
-  constructor(container) {
-    this.container = container
-  }
-
-  static getInstance() {
-    const gameGrid = document.createElement('div')
-
-    gameGrid.className = styles.gameField__gameGrid
-
-    return new GameGrid(gameGrid)
+  constructor() {
+    this.container = this.buildView()
   }
 
   getContainer() {
     return this.container
   }
 
-  buildOrRefreshGrid(size) {
+  buildView() {
+    const gameGrid = document.createElement('div')
+
+    gameGrid.className = styles.gameField__gameGrid
+
+    return gameGrid
+  }
+
+  buildOrRefreshGrid = size => {
     const gameGrid = document.createDocumentFragment()
     const columns = document.createElement('div')
 
@@ -49,9 +47,7 @@ class GameGrid {
     gameGrid.appendChild(columns)
 
     this.container.replaceChildren(gameGrid)
-
-    return this
   }
 }
 
-export default GameGrid
+export default GridView

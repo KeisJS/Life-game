@@ -1,62 +1,59 @@
-class GameModel {
-  static instance
-  static getInstance(...params) {
-    if (!GameModel.instance) {
-      GameModel.instance = new GameModel(...params)
-      window.cells = []
-    }
+import Observer from '../lib/observer'
 
-    return GameModel.instance
-  }
-
+class LifeGameModel extends Observer {
   gameFieldColumns = []
   maxCoords
+  size
+  gameId
 
   constructor({ size, initialCells } = {
     size: 1,
     initialCells: []
   }) {
+    super()
     this.maxCoords = size - 1
     this.fillCells(initialCells)
+    this.size = size
   }
-
 
   clear() {
     this.gameFieldColumns = []
+    this.size = 1
+    this.maxCoords = 0
+    this.stopGame()
+    this.emitEvent('clear')
+  }
+
+  stopGame() {
+    window.clearInterval(this.gameId)
   }
 
   setSize(size) {
     this.maxCoords = size - 1
+    this.size = size
+    this.gameFieldColumns = []
+    this.stopGame()
+    this.emitEvent('changeSize', this.size)
   }
-  
+
   fillCells(cells) {
     cells.forEach(cell => {
       const [x, y] = cell
-      
+
       if (!this.gameFieldColumns[x]) {
         this.gameFieldColumns[x] = []
       }
-      
+
       this.gameFieldColumns[x][y] = [x, y]
     })
   }
 
-  refreshCell([x, y]) {
+  refreshCell = ([x, y]) => {
     if (this.gameFieldColumns[x] && this.gameFieldColumns[x][y]) {
       delete this.gameFieldColumns[x][y]
     } else {
       this.fillCells([[x, y]])
     }
-
-    window.cells.push([x, y])
-  }
-
-  getLifeCells() {
-    return this.gameFieldColumns.reduce((cells, column) => {
-      column.forEach(cell => cells.push(cell))
-
-      return cells
-    }, [])
   }
 
   removeDeadCell(cells) {
@@ -130,11 +127,18 @@ class GameModel {
       this.fillCells(newBornCells)
     }
 
-    return {
+    this.emitEvent('nextGeneration', {
       dead: deadCells,
       newBorn: newBornCells
-    }
+    })
+  }
+
+  runGame() {
+    this.stopGame()
+    this.gameId = window.setInterval(() => {
+      this.nextGeneration()
+    }, 100)
   }
 }
 
-export default GameModel
+export default LifeGameModel

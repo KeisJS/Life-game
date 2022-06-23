@@ -7,7 +7,7 @@ const OneStepControl = () => {
 
   const template = `
 <div class="${controlStyles.controlField}">
-  <button>One step</button>
+  <button>One step / Stop</button>
 </div>
   `
 

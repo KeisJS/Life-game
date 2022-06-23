@@ -15,7 +15,7 @@ describe('Test OneStepControl', () => {
 
     document.body.append(gameFieldClearControl)
 
-    const oneStepButton = byText('One step').get()
+    const oneStepButton = byText('One step / Stop').get()
 
     userEvent.click(oneStepButton)
 

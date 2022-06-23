@@ -1,20 +1,24 @@
 import styles from '../styles.module.scss'
-import GameGrid from '../gameGrid'
+import LifeGameView from '../index'
 
-class LifeCells {
+class CellsView {
   container
   cells = new Map()
 
-  constructor(container) {
-    this.container = container
+  constructor() {
+    this.container = this.buildView()
   }
 
-  static getInstance() {
+  buildView() {
     const container = document.createElement('div')
 
     container.className = styles.gameField__cells
 
-    return new LifeCells(container)
+    return container
+  }
+
+  getContainer() {
+    return this.container
   }
 
   clear() {
@@ -50,25 +54,25 @@ class LifeCells {
     return this
   }
 
-  refreshCell([x, y ], isRaw= false) {
-    const cX = isRaw ? x * GameGrid.gridCellSize : x
-    const cY = isRaw ? y * GameGrid.gridCellSize : y
-    const key = `${cX}:${cY}`
+  //cells from screen
+  refreshCell([x, y]) {
+    const key = `${x}:${y}`
     const cell = this.cells.get(key)
 
     if (cell) {
-      this.removeCell([cX, cY])
+      this.removeCell([x, y])
     } else {
-      this.addCell([cX, cY])
+      this.addCell([x, y])
     }
   }
 
+  // cells from model
   refreshCells(cells) {
     const viewCells = document.createDocumentFragment()
 
     cells.forEach(([x, y]) => {
-      const cX = x * GameGrid.gridCellSize
-      const cY = y * GameGrid.gridCellSize
+      const cX = x * LifeGameView.gridCellSize
+      const cY = y * LifeGameView.gridCellSize
       const key = `${cX}:${cY}`
       const cell = this.cells.get(key)
 
@@ -81,10 +85,6 @@ class LifeCells {
 
     this.container.appendChild(viewCells)
   }
-
-  getContainer() {
-    return this.container
-  }
 }
 
-export default LifeCells
+export default CellsView
