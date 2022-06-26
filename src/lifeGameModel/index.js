@@ -18,8 +18,6 @@ class LifeGameModel extends Observer {
 
   clear() {
     this.gameFieldColumns = []
-    this.size = 1
-    this.maxCoords = 0
     this.stopGame()
     this.emitEvent('clear')
   }
@@ -62,31 +60,18 @@ class LifeGameModel extends Observer {
     })
   }
 
-  getRange(c) {
-    let range
-
-    if (c === 0) {
-      range = [this.maxCoords, 0, 1]
-    } else if (c === this.maxCoords) {
-      range = [c - 1, c, 0]
-    } else {
-      range = [c - 1, c, c + 1]
-    }
-
-    return range
-  }
-
   nextGeneration() {
     const deadCells = []
     const emptyCellSiblings = []
 
     this.gameFieldColumns.forEach(column => {
       column.forEach(([x, y]) => {
-        const rangeX = this.getRange(x)
+        const size = this.size
+        const rangeX = [(size + x - 1)%size, x, (x + 1)%size]
 
         let currentLifeSiblings = 0
         rangeX.forEach(sX => {
-          const rangeY = this.getRange(y)
+          const rangeY = [(size + y - 1)%size, y, (y + 1)%size]
 
           rangeY.forEach(sY => {
             if (!(sX === x && sY === y)) {
