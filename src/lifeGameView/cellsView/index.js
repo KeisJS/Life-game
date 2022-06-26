@@ -69,15 +69,17 @@ class CellsView {
   // cells from model
   refreshCells(cells) {
     const viewCells = document.createDocumentFragment()
+    const deleteCells = document.createDocumentFragment()
 
     cells.forEach(([x, y]) => {
       const cX = x * LifeGameView.gridCellSize
       const cY = y * LifeGameView.gridCellSize
       const key = `${cX}:${cY}`
-      const cell = this.cells.get(key)
+      const cell  = this.cells.get(key)
 
       if (cell) {
-        this.removeCell([cX, cY])
+        deleteCells.appendChild(cell)
+        this.cells.delete(key)
       } else {
         viewCells.appendChild(this.createCellView([cX, cY]))
       }

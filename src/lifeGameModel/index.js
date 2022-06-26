@@ -83,10 +83,11 @@ class LifeGameModel extends Observer {
     this.gameFieldColumns.forEach(column => {
       column.forEach(([x, y]) => {
         const rangeX = this.getRange(x)
-        const rangeY = this.getRange(y)
 
         let currentLifeSiblings = 0
         rangeX.forEach(sX => {
+          const rangeY = this.getRange(y)
+
           rangeY.forEach(sY => {
             if (!(sX === x && sY === y)) {
               if (this.gameFieldColumns[sX] && this.gameFieldColumns[sX][sY]) {
