@@ -62,7 +62,7 @@ class LifeGameModel extends Observer {
 
   nextGeneration() {
     const deadCells = []
-    const newBornCells = []
+    const emptyCellSiblings = []
 
     this.gameFieldColumns.forEach(column => {
       column.forEach(([x, y]) => {
@@ -78,23 +78,11 @@ class LifeGameModel extends Observer {
               if (this.gameFieldColumns[sX] && this.gameFieldColumns[sX][sY]) {
                 currentLifeSiblings++
               } else {
-                const siblingXRange = [(size + sX - 1)%size, sX, (sX + 1)%size]
-                const siblingYRange = [(size + sY - 1)%size, sY, (sY + 1)%size]
-
-                let lifeSibCount = 0
-                for (let cX = 0; cX < 3; cX++) {
-                  const curX = siblingXRange[cX]
-                  for (let cY = 0; cY < 3; cY++) {
-                    const curY = siblingYRange[cY]
-                    if (this.gameFieldColumns[curX] && this.gameFieldColumns[curX][curY]) {
-                      lifeSibCount++
-                    }
-                  }
+                if (!emptyCellSiblings[sX]) {
+                  emptyCellSiblings[sX] = []
                 }
 
-                if (lifeSibCount === 3) {
-                  newBornCells.push([sX, sY])
-                }
+                emptyCellSiblings[sX][sY] = emptyCellSiblings[sX][sY] ? ++emptyCellSiblings[sX][sY] : 1
               }
             }
           })
@@ -105,6 +93,17 @@ class LifeGameModel extends Observer {
         }
       })
     })
+
+    const newBornCells = emptyCellSiblings.reduce((cells, column, x) => {
+      column.forEach((count, y) => {
+        if (count === 3) {
+          cells.push([x, y])
+        }
+      })
+
+      return cells
+    }, [])
+
 
     if (deadCells.length > 0) {
       this.removeDeadCell(deadCells)
